@@ -8,8 +8,8 @@ import pandas as pds
 import requests
 import simplejson as json
 #this list does not seem to be exhaustive, but is the best I could find
-from get_all_tickers import get_tickers as gt
-list_of_all_tickers = gt.get_tickers()
+#from get_all_tickers import get_tickers as gt
+#list_of_all_tickers = gt.get_tickers()
 
 app = Flask(__name__)
 
@@ -27,7 +27,7 @@ def image():
         #get stock ticker symbol from submission on landing page
         tickersym = request.form['Name']
         #check if the input is a valid U.S. stock ticker symbol
-        if (not tickersym) or (tickersym not in list_of_all_tickers):
+        if (not tickersym) or tickersym.isdigit(): #or (tickersym not in list_of_all_tickers):
             #suggest that users try again with a recognized ticker symbol
             return render_template("input_error.html")
         else:
