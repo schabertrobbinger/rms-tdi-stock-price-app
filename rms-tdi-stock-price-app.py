@@ -7,8 +7,7 @@ from matplotlib.figure import Figure
 import pandas as pds
 import requests
 import simplejson as json
-#this list does not seem to be exhaustive, but is the best I could find
-from get_all_tickers import get_tickers as gt
+#the list of U.S. stocks from the get-all-tickers module is used for error checking
 
 app = Flask(__name__)
 
@@ -26,7 +25,8 @@ def image():
         #get stock ticker symbol from submission on landing page
         tickersym = request.form['Name']
         #check if the input is a valid U.S. stock ticker symbol
-        list_of_all_tickers = gt.get_tickers()
+        stocktickers = open("stocktickers", 'r')
+        list_of_all_tickers = stocktickers.read().splitlines()
         if (not tickersym) or (tickersym not in list_of_all_tickers):
             #suggest that users try again with a recognized ticker symbol
             return render_template("input_error.html")
@@ -57,7 +57,7 @@ def image():
             fig = Figure()
             im = fig.add_subplot(1, 1, 1)
             im.set_xlabel('day of the last month',fontsize = 14, labelpad = 10)
-            im.set_ylabel('adjusted closing price', fontsize = 16, labelpad = 10)
+            im.set_ylabel('adjusted closing price', fontsize = 16, labelpad = 8)
             im.plot(df['date'],df['price'], "ro")
             fig.subplots_adjust(bottom=0.2)
             #convert to png
